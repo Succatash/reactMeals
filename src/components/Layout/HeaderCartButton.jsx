@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import Style from './HeaderCartButton.module.css';
 import CartIcon from '../Cart/CartIcon';
@@ -6,14 +6,22 @@ import cartContext from '../../context/cart-context';
 
 const HeaderCartButton = (props) => {
 	const cartCtx = useContext(cartContext);
+	const [btnHighlighted, setBtnHighlighted] = useState(false);
 
 	const numbersInCartItems = cartCtx.items.reduce((curNumber, item) => {
 		let num = curNumber + item.amount;
 		return num;
 	}, 0);
 
-	const btnClasses = `${style.button} ${style.bump}`;
+	useEffect(() => {
+		if (cartCtx.items.length === 0) {
+			return;
+		} else {
+			setBtnHighlighted(true);
+		}
+	}, []);
 
+	const btnClasses = `${Style.button} ${btnHighlighted ? Style.bump : ''}`;
 	return (
 		<>
 			<button className={btnClasses} type='submit' onClick={props.onClick}>
